@@ -1,0 +1,35 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Backend LMS Service with PG",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "yes"
+  },
+  "keywords": [
+    "lms",
+    "payment_gateway(PG)"
+  ],
+  "author": "Knightcore47",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.0.1",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.0",
+    "express-xss-sanitizer": "^1.2.1",
+    "helmet": "^8.0.0",
+    "hpp": "^0.2.3",
+    "mongoose": "^8.9.2",
+    "morgan": "^1.10.0"
+  }
+}
