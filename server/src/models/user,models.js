@@ -112,7 +112,7 @@ userSchema.methods.getResetPasswordToken = function () {
 // NOTE - User last active updation
 userSchema.methods.updateLastActive = function () {
     this.lastActive = Date.now()
-    return this.lastActive({ validateBeforeSave: false })
+    return this.save({ validateBeforeSave: false })
 }
 
 
