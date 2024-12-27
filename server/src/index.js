@@ -9,6 +9,7 @@ import { xss } from 'express-xss-sanitizer'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import healthRoute from './routes/health.routes.js'
+import userRoute from './routes/user.routes.js'
 
 
 dotenv.config()
@@ -100,6 +101,8 @@ app.get('/', (request, response) => {
 })
 
 app.use("api/v1/health", healthRoute)
+
+app.use("api/v1/user", userRoute)
 
 
 
