@@ -1,6 +1,7 @@
 import { catchAsync, ApiError } from "../middleware/error.middleware.js";
 import { User } from '../models/user.models.js'
 import { generateToken } from "../utils/generateToken.utils.js";
+import { deleteMediaFromCloudinary, uploadMedia } from "../utils/cloudinary.utils.js";
 
 
 
@@ -120,9 +121,8 @@ export const authenticateUserAccount = catchAsync(async function (request, respo
 
 // NOTE - Logout user
 export const signoutUserAccount = catchAsync(async function (_, response) {
-    response
+    return response
         .cookie('token', '', { maxAge: 0 })
-    response
         .status(200)
         .json({
             success: true,
@@ -148,7 +148,7 @@ export const getCurrentUserProfile = catchAsync(async function (request, respons
     }
 
     // NOTE - Send response
-    response
+    return response
         .status(200)
         .json({
             success: true,
@@ -164,7 +164,68 @@ export const getCurrentUserProfile = catchAsync(async function (request, respons
 
 
 
-// NOTE - Get current user profile
-export const test = catchAsync(async function (request, response) {
+// NOTE - Update current user profile
+export const updateUserProfile = catchAsync(async function (request, response) {
 
+    // NOTE - Update user info  [credentials]
+    const { name, email, bio } = request.body
+
+    const updateInfoData = {
+        name: name?.trim(),
+        email: email?.toLowerCase(),
+        bio
+    }
+
+
+    // NOTE - Update user info [file]
+    if (request.file) {
+        const avatarResult = await uploadMedia(request.file.path)
+
+        updateInfoData.avatar = avatarResult.secure_url
+
+        // NOTE - Remove old avatar from cloudinary
+        const user = await User.findById(request.id);
+
+        if (!user) {
+            throw new ApiError('User not found', 404)
+        }
+
+        if (user.avatar && user.avatar !== 'default-avatar.jpg') {
+            await deleteMediaFromCloudinary(user.avatar)
+        }
+    }
+
+
+
+    // NOTE - Update user info and get updated document [database]
+    const updatedUserInfo = await User.findByIdAndUpdate(
+        request.id,
+        updateInfoData,
+        {
+            new: true,
+            runValidators: true
+        }
+    )
+
+    // NOTE - Throw error if user not found
+    if (!updatedUserInfo) {
+        throw new ApiError('User not found', 404)
+    }
+
+    // NOTE - Send response
+    return response
+        .status(200)
+        .json({
+            success: true,
+            data: updatedUserInfo,
+            message: 'User profile updated successfully'
+        })
 })
+
+
+
+
+// NOTE - Update current user profile
+// export const test = catchAsync(async function (request, response) {
+
+// })
