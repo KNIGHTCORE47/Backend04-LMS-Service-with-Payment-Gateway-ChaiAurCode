@@ -21,7 +21,7 @@ export function generateToken(response, user, message) {
     }
 
     return response
-        .staus(200)
+        .status(200)
         .cookie('token', token, cookieOptions)
         .json({
             success: true,
