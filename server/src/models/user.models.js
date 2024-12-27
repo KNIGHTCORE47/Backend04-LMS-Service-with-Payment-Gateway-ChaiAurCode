@@ -119,7 +119,7 @@ userSchema.methods.updateLastActive = function () {
 
 // NOTE - Virtual field for enrolled course count is..
 userSchema.virtual('enrolledCourseCount').get(function () {
-    return this.enrolledCourses.length
+    return this.enrolledCourses?.length
 })
 
 
