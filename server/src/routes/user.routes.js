@@ -8,14 +8,36 @@ import {
 } from '../controllers/user.controllers.js'
 
 import { isAuthenticated } from '../middleware/auth.middleware.js'
+import {
+    validateSignUp,
+    validateSignIn
+} from '../middleware/validation.middleware.js';
 import upload from '../utils/multer.utils.js';
+
+
+
 
 const router = express.Router();
 
+
+
+
 // NOTE - User Auth Route
-router.post("/sigup", createUserAccount);
-router.post("/signin", authenticateUserAccount);
+router.post(
+    "/signup",
+    validateSignUp,
+    createUserAccount
+);
+
+router.post(
+    "/signin",
+    validateSignIn,
+    authenticateUserAccount
+);
+
 router.post("/signout", signoutUserAccount);
+
+
 
 // NOTE - Profile Route
 router.get(
