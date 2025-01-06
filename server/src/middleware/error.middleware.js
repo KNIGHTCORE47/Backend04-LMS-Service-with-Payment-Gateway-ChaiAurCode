@@ -23,7 +23,7 @@ export class ApiError extends Error {
 // }
 
 
-// NOTE - cathAsync function with explecit promise resolve and rejection
+// NOTE - cathAsync function without explecit promise resolve and rejection
 export function catchAsync(fn) {
     return function (request, response, next) {
         fn(request, response, next)
