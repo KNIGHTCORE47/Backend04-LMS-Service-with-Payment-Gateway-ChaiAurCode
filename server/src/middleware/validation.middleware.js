@@ -81,6 +81,21 @@ export const commonValidations = {
             .withMessage('Password must be at least 8 characters long')
             .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
             .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
+
+    price:
+        body('price')
+            .isFloat({ min: 0 })
+            .withMessage('Price must be a positive number'),
+
+    objectId: (field) =>
+        param(field)
+            .isMongoId()
+            .withMessage(`${field} must be a valid ObjectId`),
+
+    url:
+        body('url')
+            .isURL()
+            .withMessage('Please provide a valid URL'),
 }
 
 
@@ -94,4 +109,23 @@ export const validateSignUp = validate([
 export const validateSignIn = validate([
     commonValidations.email,
     commonValidations.password
+])
+
+
+export const validatePasswordChange = validate([
+    body('currentPassword')
+        .notEmpty()
+        .withMessage('Current password is required'),
+
+    body('newPassword')
+        .notEmpty()
+        .withMessage('New password is required')
+        .custom((value, { request }) => {
+            if (value === request.body.currentPassword) {
+                throw new Error('New password cannot be the same as the current password');
+            }
+            return true;
+        })
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+        .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character')
 ])
