@@ -42,7 +42,7 @@ const lectureSchema = new Schema({
 
 // NOTE - pre-save hook to round off the duration to 2 decimal places [e.g. 1.2345 => 1.23] [OPTIONAL!!]
 lectureSchema.pre('save', async function (next) {
-    if (!this.duration) {
+    if (this.duration) {
         this.duration = Math.round(this.duration * 100) / 100
     }
 
