@@ -17,9 +17,9 @@ const courseSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    catagory: {
+    category: {
         type: String,
-        required: [true, 'Course Catagory is required'],
+        required: [true, 'Course Category is required'],
         trim: true,
     },
     level: {
